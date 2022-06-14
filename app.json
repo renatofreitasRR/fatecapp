@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "fatecapp",
+    "slug": "fatecapp",
+    "scheme": "fatecapp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.renatofordevs.fatecapp"
+    }
+  }
+}
