@@ -16,14 +16,13 @@ import { useAuth } from '../../hooks/auth';
 import { Alert } from 'react-native';
 
 export function SignIn({ navigation }: any) {
-    const { user, signInWithGoogle } = useAuth();
+    const { userGoogle, signInWithGoogle } = useAuth();
 
     async function handleSignInWWithGoogle() {
         try {
             await signInWithGoogle();
         }
         catch (error: any) {
-            console.log(error);
             Alert.alert('Erro', error.message);
         }
     }
@@ -39,14 +38,25 @@ export function SignIn({ navigation }: any) {
                     width={RFValue(50)}
                     height={RFValue(50)}
                 />
-                <LogoText>Médico da Família</LogoText>
+                <LogoText>
+                    Fatec Saúde
+                </LogoText>
                 <Phrase>
                     Acompanhe seus pacientes
                     de forma simples e eficiente!
                 </Phrase>
             </BackgroundPrimary>
             <BackgroundSecondary>
-                <Button
+            <ButtonLogin onPress={goToLoginPage}>
+                    <SolidLogo
+                        width={RFValue(30)}
+                        height={RFValue(30)}
+                    />
+                    <ButtonText>
+                        Entrar com email e senha
+                    </ButtonText>
+                </ButtonLogin>
+                {/* <Button
                     onPress={handleSignInWWithGoogle}
                 >
                     <GoogleLogo
@@ -56,16 +66,7 @@ export function SignIn({ navigation }: any) {
                     <ButtonText>
                         Entrar com o Google
                     </ButtonText>
-                </Button>
-                <ButtonLogin onPress={goToLoginPage}>
-                    <SolidLogo
-                        width={RFValue(30)}
-                        height={RFValue(30)}
-                    />
-                    <ButtonText>
-                        Entrar com email e senha
-                    </ButtonText>
-                </ButtonLogin>
+                </Button> */}
             </BackgroundSecondary>
         </Container>
     );

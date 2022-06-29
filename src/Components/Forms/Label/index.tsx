@@ -3,11 +3,19 @@ import { TextProps } from 'react-native';
 
 import {
     Label,
+    Required
 } from './styles';
 
+interface InputLabelProps {
+    isRequired?: boolean;
+    text: string;
+}
 
-export function InputLabel({ ...rest }) {
+
+export function InputLabel({ isRequired, text }: InputLabelProps) {
     return (
-        <Label {...rest}  />
+        <Label>
+            {text}{isRequired && <Required>*</Required>}
+        </Label>
     );
 }

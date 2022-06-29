@@ -1,11 +1,60 @@
-export interface PatientDataProps {
-    id: string,
-    name: string,
-    email: string,
+
+export interface UserProps {
+    id: number,
+    fotoLink?: string,
     cpf: string,
-    address: string,
-    photo_url: string,
-    phone: string,
-    visiteStatus: Boolean,
-    date_nasc: string,
+    dataNascimento: Date
+    email: string,
+    endereco: {
+        bairro: string,
+        cep: string,
+        complemento: string,
+        localidade: string,
+        logradouro: string,
+        numero: string,
+        uf: string
+    },
+    nome: string,
+    perfil: string,
+    telefone: string
+}
+
+export interface SaveUserProps {
+    id: number,
+    fotoLink: string,
+    cpf: string,
+    dataNascimento: Date,
+    email: string,
+    endereco: {
+        bairro: string,
+        cep: string,
+        complemento: string,
+        localidade: string,
+        logradouro: string,
+        numero: string,
+        uf: string
+    },
+    nome: string,
+    perfil: string,
+    telefone: string
+}
+
+export interface EditUserProps {
+    id: number,
+    fotoLink: string,
+    cpf: string,
+    dataNascimento: Date
+    email: string,
+    endereco: {
+        bairro: string,
+        cep: string,
+        complemento: string,
+        localidade: string,
+        logradouro: string,
+        numero: string,
+        uf: string
+    },
+    nome: string,
+    perfil: string,
+    telefone: string
 }

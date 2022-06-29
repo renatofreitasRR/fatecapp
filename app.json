@@ -7,6 +7,11 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "icon": "./src/assets/images/logoPng.png",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "backgroundColor": "#8870E5"
+    },
     "android": {
       "package": "com.renatofordevs.fatecapp"
     }

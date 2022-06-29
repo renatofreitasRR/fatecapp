@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Container } from '../../Global/container';
 import {
     Header,
@@ -9,31 +9,52 @@ import {
     Content,
     UserContent,
     UserInfoText,
-    UserPhone,
     Fields,
-    OpenEmail,
-    WhatsAppText,
     UserPhoneWhatsApp,
     UserEmail,
     UserContentPhone,
-    WhatsAppButton
+    WhatsAppButton,
+    HorizontalView,
+    RelatoriesText
 } from './styles';
-import { FontAwesome, Entypo, MaterialIcons, Feather, AntDesign } from '@expo/vector-icons';
+import { FontAwesome, Entypo, MaterialIcons, Feather, Zocial } from '@expo/vector-icons';
 
 import theme from '../../Global/styles/theme';
 import { Linking, ScrollView, TouchableOpacity } from 'react-native';
-import { PatientDataProps } from '../../interfaces/patient';
+import { UserProps } from '../../interfaces/patient';
+import { api } from '../../services/api';
+import { ViewAtentimentoProps } from '../../interfaces/atendimento';
+import { MarginRight } from '../../Global/magin';
+import { RelatoryCardPatient } from '../../Components/Relatories/RelatoryCardPatient';
+import { returnEmptyIfValueIsNull } from '../../utils/returnEmptyIfIsNull';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { NoData } from '../../Components/NoDataCard';
+import { PatientCardHomeSkeleton } from '../../Components/Skeleton/PatientCardHomeSkeleton';
+import { RelatoryCardHomeSkeleton } from '../../Components/Skeleton/RelatoryCardHomeSkeleton';
+import { InputLabel } from '../../Components/Forms/Label';
+import { formatDate } from '../../utils/dateFormat';
 
-export function NestedPatient({ route }: any) {
-    const patient: PatientDataProps = route.params.patient;
+export function NestedPatient({ navigation, route }: any) {
+    const patient: UserProps = route.params.patient;
+    const [patientRelatories, setPatientRelatories] = useState<ViewAtentimentoProps[]>([]);
+    const [skeleton, setSkeleton] = useState(true);
 
+    const [offset, setOffset] = useState(0);
+    const scrollViewRef = useRef();
 
-    function goToPatientWhatsApp(userPhone: number) {
-        Linking
-            .openURL(`http://api.whatsapp.com/send?phone=${userPhone}`);
+    const slowlyScrollDown = () => {
+        const y = offset + 80;
+        scrollViewRef.current.scrollTo({ x: 0, y, animated: true });
+        setOffset(y);
     }
 
-    function callPatient(userPhone: number) {
+    function goToPatientWhatsApp(userPhone: string) {
+        console.log(userPhone);
+        Linking
+            .openURL(`http://api.whatsapp.com/send?phone=${encodeURI(userPhone)}`);
+    }
+
+    function callPatient(userPhone: string) {
         Linking
             .openURL(`tel:${userPhone}`);
     }
@@ -48,56 +69,40 @@ export function NestedPatient({ route }: any) {
             .openURL(`http://maps.google.com/?q=${encodeURI(address)}`);
     }
 
+    useEffect(() => {
+        async function getAllRelatories() {
+            var response = await api.get(`atendimento/buscar-por-paciente/${patient.id}`);
+
+            var data = await response.data;
+            setPatientRelatories(data);
+            setTimeout(() => {
+                setSkeleton(false);
+            }, 1000);
+        }
+        getAllRelatories();
+    }, [])
+
 
     return (
         <Container>
-            <Header>
-                <UserImage source={{ uri: patient.photo_url }} />
-            </Header>
             <Content>
                 <UserNameContainer>
-                    <FirstName>{patient.name}</FirstName>
+                    <FirstName>{patient.nome}</FirstName>
                 </UserNameContainer>
                 <UserInfos>
-                    <Fields>
-                        <UserEmail onPress={() => goToPatientEmail(patient.email)}>
-                            <UserContent>
-                                <Entypo
-                                    name="email"
-                                    size={24}
-                                    color={theme.colors.primary}
-                                />
-                                <UserInfoText>
-                                    {patient.email}
-                                </UserInfoText>
-                            </UserContent>
-                        </UserEmail>
-                        <UserPhoneWhatsApp>
-                            <UserContentPhone onPress={() => goToPatientWhatsApp(patient.phone)}>
-                                <FontAwesome
-                                    name="whatsapp"
-                                    size={24}
-                                    color={theme.colors.primary}
-                                />
-                                <UserInfoText>
-                                    {patient.phone}
-                                </UserInfoText>
-                            </UserContentPhone>
-                            <WhatsAppButton onPress={() => callPatient(patient.phone)}>
-                                <Feather
-                                    name="phone-call"
-                                    size={24}
-                                    color={theme.colors.primary}
-                                />
-                            </WhatsAppButton>
-                            <WhatsAppButton onPress={() => goToPatientWhatsApp(patient.phone)}>
-                                <AntDesign
-                                    name="message1"
-                                    size={24}
-                                    color={theme.colors.primary}
-                                />
-                            </WhatsAppButton>
-                        </UserPhoneWhatsApp>
+                    <Fields ref={scrollViewRef}>
+                        <InputLabel text={'Email'} />
+                        <UserContent>
+                            <MaterialIcons
+                                name="email"
+                                size={24}
+                                color={theme.colors.primary}
+                            />
+                            <UserInfoText>
+                                {patient.email}
+                            </UserInfoText>
+                        </UserContent>
+                        <InputLabel text={'CPF'} />
                         <UserContent>
                             <Entypo
                                 name="documents"
@@ -108,28 +113,103 @@ export function NestedPatient({ route }: any) {
                                 {patient.cpf}
                             </UserInfoText>
                         </UserContent>
-                        <TouchableOpacity onPress={() => goToGoogleMaps(patient.address)}>
-                            <UserContent>
-                                <FontAwesome
-                                    name="address-book-o"
-                                    size={24}
-                                    color={theme.colors.primary}
-                                />
-                                <UserInfoText>
-                                    {patient.address}
-                                </UserInfoText>
-                            </UserContent>
-                        </TouchableOpacity>
+                        <InputLabel text={'Telefone'} />
                         <UserContent>
-                            <MaterialIcons
-                                name="date-range"
+                            <FontAwesome
+                                name="mobile-phone"
                                 size={24}
                                 color={theme.colors.primary}
                             />
                             <UserInfoText>
-                                14/05/2020
+                                {patient.telefone}
                             </UserInfoText>
                         </UserContent>
+                        <InputLabel text={'Endereço'} />
+                        <UserContent>
+                            <FontAwesome
+                                name="address-card-o"
+                                size={24}
+                                color={theme.colors.primary}
+                            />
+                            <UserInfoText>
+                                {
+                                    `${returnEmptyIfValueIsNull(patient.endereco.logradouro)}, ${returnEmptyIfValueIsNull(patient.endereco.numero)} ${returnEmptyIfValueIsNull(patient.endereco.complemento)} - ${returnEmptyIfValueIsNull(patient.endereco.bairro)}, ${returnEmptyIfValueIsNull(patient.endereco.localidade)} - ${returnEmptyIfValueIsNull(patient.endereco.uf)} `
+                                }
+                            </UserInfoText>
+                        </UserContent>
+                        <InputLabel text={'Data de Nascimento'} />
+                        <UserContent>
+                            <MaterialIcons
+                                name="calendar-today"
+                                size={20}
+                                color={theme.colors.primary}
+                            />
+                            <UserInfoText>
+                                {formatDate(patient.dataNascimento)}
+                            </UserInfoText>
+                        </UserContent>
+                        <InputLabel text={'Ações'} />
+                        <UserPhoneWhatsApp>
+                            <WhatsAppButton onPress={() => goToPatientEmail(patient.email)}>
+                                <Entypo
+                                    name="email"
+                                    size={24}
+                                    color={theme.colors.shape}
+                                />
+                            </WhatsAppButton>
+                            <WhatsAppButton onPress={() => goToGoogleMaps(`${returnEmptyIfValueIsNull(patient.endereco.logradouro)}, ${returnEmptyIfValueIsNull(patient.endereco.numero)} ${returnEmptyIfValueIsNull(patient.endereco.complemento)} - ${returnEmptyIfValueIsNull(patient.endereco.bairro)}, ${returnEmptyIfValueIsNull(patient.endereco.localidade)} - ${returnEmptyIfValueIsNull(patient.endereco.uf)} `)}>
+                                <MaterialCommunityIcons
+                                    name="google-maps"
+                                    size={24}
+                                    color={theme.colors.shape}
+                                />
+                            </WhatsAppButton>
+                            <WhatsAppButton onPress={() => callPatient(patient.telefone)}>
+                                <Feather
+                                    name="phone-call"
+                                    size={24}
+                                    color={theme.colors.shape}
+                                />
+                            </WhatsAppButton>
+                            <WhatsAppButton onPress={() => goToPatientWhatsApp(patient.telefone)}>
+                                <FontAwesome
+                                    name="whatsapp"
+                                    size={24}
+                                    color={theme.colors.shape}
+                                />
+                            </WhatsAppButton>
+                        </UserPhoneWhatsApp>
+                        <RelatoriesText>Atendimentos</RelatoriesText>
+                        <HorizontalView horizontal={true}>
+                            {
+                                skeleton
+                                    ?
+                                    <>
+                                        <RelatoryCardHomeSkeleton />
+                                        <RelatoryCardHomeSkeleton />
+                                    </>
+                                    :
+                                    patientRelatories.length > 0
+                                        ?
+                                        patientRelatories.map((relatory: ViewAtentimentoProps) => (
+                                            <>
+                                                <TouchableOpacity
+                                                    key={relatory.id}
+                                                    onPress={() => navigation.navigate('NestedViewRelatoryByPatient', { relatory: relatory })}
+                                                >
+                                                    <RelatoryCardPatient
+                                                        relatory={relatory}
+                                                    />
+                                                </TouchableOpacity>
+                                                <MarginRight></MarginRight>
+                                            </>
+                                        ))
+                                        :
+                                        <>
+                                            <NoData text={'Não há atendimentos vinculados a este paciente no momento!'} />
+                                        </>
+                            }
+                        </HorizontalView>
                     </Fields>
                 </UserInfos>
             </Content>

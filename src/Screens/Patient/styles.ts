@@ -9,8 +9,6 @@ export const Header = styled.View`
     align-items: center;
     justify-content: center;
     padding-top: ${RFValue(50)}px;
-    padding-left: ${RFValue(20)}px;
-    padding-right: ${RFValue(20)}px;
     position: relative;
 `;
 
@@ -26,11 +24,10 @@ export const UserNameContainer = styled.View`
     width: 100%;
     display: flex;
     align-items: center;
-    margin-top: ${RFValue(50)}px;
 `;
 
 export const Content = styled.View`
-    padding: ${RFValue(20)}px
+    padding: ${RFValue(16)}px;
 `;
 
 export const FirstName = styled.Text`
@@ -40,11 +37,10 @@ export const FirstName = styled.Text`
 `;
 export const UserInfos = styled.View`
     width: 100%;
-    height: ${RFPercentage(43)}px;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: ${RFValue(16)}px;
+    /* padding: ${RFValue(16)}px; */
     border-radius: 4px;
     position: relative;
     margin-top: 16px;
@@ -52,7 +48,6 @@ export const UserInfos = styled.View`
 
 export const Fields = styled.ScrollView`
     width: 100%;
-    height: 100%;
 `;
 
 export const UserContent = styled.View`
@@ -64,10 +59,9 @@ export const UserContent = styled.View`
     padding: ${RFValue(16)}px;
     border-radius: 4px;
     position: relative;
-    margin-top: 16px;
 `;
 
-export const UserContentPhone = styled.TouchableOpacity`
+export const UserContentPhone = styled.View`
     width: 60%;
     background-color: ${({ theme }) => theme.colors.shape};
     display: flex;
@@ -107,7 +101,7 @@ export const UserPhoneWhatsApp = styled.View`
 `;
 
 export const WhatsAppButton = styled.TouchableOpacity`
-    background-color: ${({ theme }) => theme.colors.shape};
+    background-color: ${({ theme }) => theme.colors.secondary};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -130,6 +124,22 @@ export const WhatsAppText = styled.Text`
     font-size: ${RFValue(12)}px;
 `;
 
+export const RelatoriesText = styled.Text`
+    color: ${({ theme }) => theme.colors.text_dark};
+    font-family: ${({ theme }) => theme.fonts.medium};
+    font-size: ${RFValue(24)}px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+`;
+
+export const HorizontalView = styled.ScrollView.attrs({
+    horizontal: true,
+    showsHorizontalScrollIndicator: false,
+    contentContainerStyle: { paddingHorizontal : 0 }
+})`
+    width: 100%;
+    margin-bottom: 100px;
+`;
 
 
 

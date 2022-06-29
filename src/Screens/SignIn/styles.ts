@@ -22,7 +22,8 @@ export const BackgroundSecondary = styled.View`
 `;
 
 export const LogoText = styled.Text`
-    font-size: ${RFValue(16)}px;
+    padding-top: 8px;
+    font-size: ${RFValue(20)}px;
     color: ${({theme}) => theme.colors.shape};
     font-family: ${({theme}) => theme.fonts.bold};
 `;
@@ -39,8 +40,8 @@ export const Phrase = styled.Text`
 export const Button = styled.TouchableOpacity`
     background-color: ${({theme}) => theme.colors.shape};
     position: absolute;
-    width: 100%;
     top: -25px;
+    width: 100%;
     height: ${RFValue(50)}px;
     border-radius: 4px;
     display: flex;
@@ -64,6 +65,8 @@ export const ButtonLogin = styled.TouchableOpacity`
     align-items: center;
     padding-left: 16px;
     padding-right: 16px;
+    position: absolute;
+    top: -25px;
 `;
 
 export const ButtonText = styled.Text`

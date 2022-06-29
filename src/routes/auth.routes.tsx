@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SignIn } from '../Screens/SignIn';
 import { AppRoutes } from './app.routes';
 import { Login } from '../Screens/Login';
+import { Splash } from '../Screens/Splash';
 
 
 function AppProvider() {
@@ -19,12 +20,22 @@ export function AuthRoutes() {
 
     return (
         <Navigator screenOptions={{
-            headerShown: false
+            headerShown: false,
         }}
             initialRouteName='InitialPage'
         >
-            <Screen name='InitialPage' component={SignIn}></Screen>
-            <Screen name='Login' component={Login}></Screen>
+            <Screen
+                name='InitialPage'
+                component={SignIn}
+            ></Screen>
+            <Screen
+                options={{
+                    headerShown: true,
+                    headerTitle: 'Voltar'
+                }}
+                name='Login'
+                component={Login}
+            ></Screen>
             <Screen
                 name='HomeApp'
                 component={AppProvider}

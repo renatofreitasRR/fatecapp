@@ -4,6 +4,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 
 export const PatientCard = styled.View`
     width: 100%;
+    max-width: ${RFValue(350)}px;
     border-radius: ${RFValue(8)}px;
     padding: ${RFValue(16)}px;
 
@@ -51,33 +52,6 @@ export const PatientImage = styled.Image`
     border-radius: 100px;
     margin-right: ${RFValue(16)}px;
     background-color: ${({ theme }) => theme.colors.primary};
-`;
-
-export const PatientSchedule = styled.View`
-    width: 100%;
-    height: ${RFValue(60)}px;
-    border-radius: ${RFValue(4)}px;
-    margin-right: ${RFValue(16)}px;
-    background-color: ${({ theme }) => theme.colors.primary_light};
-    padding:  ${RFValue(8)}px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-`;
-
-
-export const PatientScheduleInfos = styled.View`
-    flex-direction: row;
-    align-items: center;
-    
-`;
-
-
-export const PatientScheduleText = styled.Text`
-    font-family: ${({ theme }) => theme.fonts.bold};
-    font-size: ${RFValue(12)}px;
-    margin-left: ${RFValue(4)}px;
-    color:  ${({ theme }) => theme.colors.title};
 `;
 
 export const PatientCardFooter = styled.View`
